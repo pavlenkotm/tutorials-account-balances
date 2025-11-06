@@ -2,9 +2,29 @@
 
 SubQuery powers the next generation of Polkadot dApps by allowing developers to extract, transform and query blockchain data in real time using GraphQL. In addition to this, SubQuery provides production quality hosting infrastructure to run these projects in.
 
-# SubQuery Example - Account balance
+# SubQuery Example - Account Balance & Transfer Tracker
 
-This subquery example indexes the deposit balance of each account and it is an example of an EventHandler. By processing substrate events with the use of the "balances/Deposit" mapping filter, we can obtain account and the DOT balance of the account.
+This enhanced SubQuery project provides comprehensive blockchain data indexing for Polkadot, including:
+
+- **Account Balances**: Track deposit balances for all accounts
+- **Transfer Events**: Monitor and record all DOT transfers
+- **Transaction History**: Complete transaction history for each account
+- **Account Metadata**: Detailed statistics including first seen, last active, and transaction counts
+- **Network Statistics**: Global analytics including total accounts, transfers, and volume
+
+## Features
+
+- ✅ Account balance tracking from deposit events
+- ✅ Transfer event monitoring and indexing
+- ✅ Transaction history with complete metadata
+- ✅ Account activity statistics and analytics
+- ✅ Global network metrics and statistics
+- ✅ Comprehensive validation utilities
+- ✅ Balance calculation and formatting helpers
+- ✅ Data aggregation and analytics functions
+- ✅ Advanced error handling and logging
+- ✅ Performance optimization with caching
+- ✅ Rich formatting utilities for output
 
 # Getting Started
 
@@ -59,10 +79,38 @@ query {
 
 # Understanding this project
 
-This project has a function called handleEvent. It uses an [EventHandler](https://doc.subquery.network/create/mapping#event-handler) which is defined in the [manifest file](https://doc.subquery.network/create/manifest.html) (project.yaml) as "kind: substrate/EventHandler"
+This project includes multiple event handlers and utilities:
 
-The [schema.graphql](https://doc.subquery.network/create/graphql.html) file defines the variables blockHeight which is mandatory and of type Int.
+## Event Handlers
 
-If we examine the function handleEvebt in more detail, you can see that this function takes one argument of type SubstrateEvent. It then creates a new instance of Account passing in the event.extrinsic.block.block.header.hash argument as a string and assigning this to the variable record.
+1. **handleEvent**: Processes deposit events using the `balances/Deposit` filter
+2. **handleTransfer**: Tracks all transfer events using the `balances/Transfer` filter
+3. **updateAccountMetadata**: Maintains account statistics and metadata
 
-Next, the account is converted to a string via toString() and assigned to record.account. The balance is type cast as Balance and converted to a big integer.
+## Utilities
+
+The project includes comprehensive utility modules in `src/utils/`:
+
+- **helpers.ts**: General helper functions for formatting and validation
+- **validators.ts**: Blockchain data validation functions
+- **constants.ts**: Network constants and configuration
+- **balanceHelpers.ts**: Balance calculation and conversion utilities
+- **formatting.ts**: Output formatting for various data types
+- **errorHandler.ts**: Error handling and retry mechanisms
+- **aggregation.ts**: Data aggregation and analytics functions
+- **cache.ts**: Caching utilities for performance optimization
+
+## Schema Entities
+
+The [schema.graphql](https://doc.subquery.network/create/graphql.html) file defines:
+
+- **Account**: Stores account balances
+- **Transfer**: Records all transfer events
+- **TransactionHistory**: Comprehensive transaction records
+- **AccountMetadata**: Account activity statistics
+- **Statistics**: Global network metrics
+
+## Additional Resources
+
+- See [API.md](./API.md) for detailed API documentation
+- See [queries.graphql](./queries.graphql) for example queries
