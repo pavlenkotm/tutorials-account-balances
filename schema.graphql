@@ -32,3 +32,13 @@ type Statistics @entity {
   totalVolume: BigInt!
   lastUpdatedBlock: BigInt!
 }
+
+type AccountMetadata @entity {
+  id: ID!
+  account: String!
+  firstSeenBlock: BigInt!
+  lastActiveBlock: BigInt!
+  transactionCount: BigInt!
+  totalReceived: BigInt!
+  totalSent: BigInt!
+}
