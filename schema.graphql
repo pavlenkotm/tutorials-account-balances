@@ -1,5 +1,15 @@
 type Account @entity {
   id: ID! #id is a required field
   account: String #This is a Polkadot address
-  balance: BigInt # This is the amount of DOT 
+  balance: BigInt # This is the amount of DOT
+}
+
+type Transfer @entity {
+  id: ID!
+  from: String!
+  to: String!
+  amount: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  extrinsicHash: String
 }
