@@ -4,17 +4,25 @@ import {Balance} from "@polkadot/types/interfaces";
 
 export async function handleEvent(event: SubstrateEvent): Promise<void> {
     const {event: {data: [account, balance]}} = event;
-     //Create a new Account entity with ID using block hash
+
+    // Log event processing
+    logger.info(`Processing deposit event for account: ${account.toString()}`);
+
+    //Create a new Account entity with ID using block hash
     let record = new Account(event.extrinsic.block.block.header.hash.toString());
     // Assign the Polkadot address to the account field
     record.account = account.toString();
     // Assign the balance to the balance field "type cast as Balance"
     record.balance = (balance as Balance).toBigInt();
+
+    logger.info(`Saving account ${record.account} with balance ${record.balance}`);
     await record.save();
 }
 
 export async function handleTransfer(event: SubstrateEvent): Promise<void> {
     const {event: {data: [from, to, amount]}} = event;
+
+    logger.info(`Processing transfer from ${from.toString()} to ${to.toString()}`);
 
     // Create a new Transfer entity with a unique ID
     const transfer = new Transfer(`${event.block.block.header.number}-${event.idx}`);
@@ -25,6 +33,7 @@ export async function handleTransfer(event: SubstrateEvent): Promise<void> {
     transfer.timestamp = event.block.timestamp;
     transfer.extrinsicHash = event.extrinsic?.extrinsic.hash.toString();
 
+    logger.info(`Saving transfer of ${transfer.amount} DOT at block ${transfer.blockNumber}`);
     await transfer.save();
 }
 
