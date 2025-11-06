@@ -1,0 +1,155 @@
+# GraphQL Query Examples for Account Balances SubQuery
+
+# Get top 10 accounts by balance
+query TopAccountsByBalance {
+  accounts(first: 10, orderBy: BALANCE_DESC) {
+    nodes {
+      id
+      account
+      balance
+    }
+  }
+}
+
+# Get recent transfers
+query RecentTransfers {
+  transfers(first: 20, orderBy: BLOCK_NUMBER_DESC) {
+    nodes {
+      id
+      from
+      to
+      amount
+      blockNumber
+      timestamp
+      extrinsicHash
+    }
+  }
+}
+
+# Get transfers for specific account
+query AccountTransfers($account: String!) {
+  transfers(filter: { or: [{ from: { equalTo: $account } }, { to: { equalTo: $account } }] }) {
+    nodes {
+      id
+      from
+      to
+      amount
+      blockNumber
+      timestamp
+    }
+  }
+}
+
+# Get account metadata
+query AccountMetadata($account: String!) {
+  accountMetadatas(filter: { account: { equalTo: $account } }) {
+    nodes {
+      id
+      account
+      firstSeenBlock
+      lastActiveBlock
+      transactionCount
+      totalReceived
+      totalSent
+    }
+  }
+}
+
+# Get global statistics
+query GlobalStatistics {
+  statistics(first: 1) {
+    nodes {
+      id
+      totalAccounts
+      totalTransfers
+      totalVolume
+      lastUpdatedBlock
+    }
+  }
+}
+
+# Get transaction history for account
+query TransactionHistory($account: String!) {
+  transactionHistories(
+    filter: { account: { equalTo: $account } }
+    orderBy: BLOCK_NUMBER_DESC
+  ) {
+    nodes {
+      id
+      account
+      transactionType
+      amount
+      blockNumber
+      timestamp
+      success
+      fee
+    }
+  }
+}
+
+# Get large transfers (over 1000 DOT)
+query LargeTransfers {
+  transfers(
+    filter: { amount: { greaterThan: "10000000000000" } }
+    orderBy: AMOUNT_DESC
+  ) {
+    nodes {
+      id
+      from
+      to
+      amount
+      blockNumber
+      timestamp
+    }
+  }
+}
+
+# Get most active accounts by transaction count
+query MostActiveAccounts {
+  accountMetadatas(first: 10, orderBy: TRANSACTION_COUNT_DESC) {
+    nodes {
+      account
+      transactionCount
+      totalReceived
+      totalSent
+      lastActiveBlock
+    }
+  }
+}
+
+# Get transfers in specific block range
+query TransfersInBlockRange($startBlock: BigInt!, $endBlock: BigInt!) {
+  transfers(
+    filter: {
+      and: [
+        { blockNumber: { greaterThanOrEqualTo: $startBlock } }
+        { blockNumber: { lessThanOrEqualTo: $endBlock } }
+      ]
+    }
+  ) {
+    nodes {
+      id
+      from
+      to
+      amount
+      blockNumber
+      timestamp
+    }
+  }
+}
+
+# Paginated accounts query
+query PaginatedAccounts($first: Int!, $offset: Int!) {
+  accounts(first: $first, offset: $offset, orderBy: BALANCE_DESC) {
+    totalCount
+    nodes {
+      id
+      account
+      balance
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
