@@ -16,3 +16,8 @@ dataSources:
           filter:
             module: balances
             method: Deposit
+        - handler: handleTransfer
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Transfer

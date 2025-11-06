@@ -1,5 +1,44 @@
 type Account @entity {
   id: ID! #id is a required field
   account: String #This is a Polkadot address
-  balance: BigInt # This is the amount of DOT 
+  balance: BigInt # This is the amount of DOT
+}
+
+type Transfer @entity {
+  id: ID!
+  from: String!
+  to: String!
+  amount: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  extrinsicHash: String
+}
+
+type TransactionHistory @entity {
+  id: ID!
+  account: String!
+  transactionType: String!
+  amount: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  success: Boolean!
+  fee: BigInt
+}
+
+type Statistics @entity {
+  id: ID!
+  totalAccounts: BigInt!
+  totalTransfers: BigInt!
+  totalVolume: BigInt!
+  lastUpdatedBlock: BigInt!
+}
+
+type AccountMetadata @entity {
+  id: ID!
+  account: String!
+  firstSeenBlock: BigInt!
+  lastActiveBlock: BigInt!
+  transactionCount: BigInt!
+  totalReceived: BigInt!
+  totalSent: BigInt!
 }
