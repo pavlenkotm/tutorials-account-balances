@@ -13,3 +13,14 @@ type Transfer @entity {
   timestamp: BigInt!
   extrinsicHash: String
 }
+
+type TransactionHistory @entity {
+  id: ID!
+  account: String!
+  transactionType: String!
+  amount: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  success: Boolean!
+  fee: BigInt
+}
