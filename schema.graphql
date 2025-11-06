@@ -24,3 +24,11 @@ type TransactionHistory @entity {
   success: Boolean!
   fee: BigInt
 }
+
+type Statistics @entity {
+  id: ID!
+  totalAccounts: BigInt!
+  totalTransfers: BigInt!
+  totalVolume: BigInt!
+  lastUpdatedBlock: BigInt!
+}
