@@ -1,5 +1,5 @@
 import {SubstrateEvent} from "@subql/types";
-import {Account, Transfer} from "../types";
+import {Account, Transfer, AccountMetadata} from "../types";
 import {Balance} from "@polkadot/types/interfaces";
 
 export async function handleEvent(event: SubstrateEvent): Promise<void> {
@@ -26,6 +26,35 @@ export async function handleTransfer(event: SubstrateEvent): Promise<void> {
     transfer.extrinsicHash = event.extrinsic?.extrinsic.hash.toString();
 
     await transfer.save();
+}
+
+export async function updateAccountMetadata(event: SubstrateEvent, accountAddress: string, amountReceived?: bigint, amountSent?: bigint): Promise<void> {
+    const blockNumber = event.block.block.header.number.toBigInt();
+
+    // Try to load existing metadata or create new
+    let metadata = await AccountMetadata.get(accountAddress);
+
+    if (!metadata) {
+        metadata = new AccountMetadata(accountAddress);
+        metadata.account = accountAddress;
+        metadata.firstSeenBlock = blockNumber;
+        metadata.transactionCount = BigInt(0);
+        metadata.totalReceived = BigInt(0);
+        metadata.totalSent = BigInt(0);
+    }
+
+    metadata.lastActiveBlock = blockNumber;
+    metadata.transactionCount = metadata.transactionCount + BigInt(1);
+
+    if (amountReceived) {
+        metadata.totalReceived = metadata.totalReceived + amountReceived;
+    }
+
+    if (amountSent) {
+        metadata.totalSent = metadata.totalSent + amountSent;
+    }
+
+    await metadata.save();
 }
 
 
