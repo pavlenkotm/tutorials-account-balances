@@ -1,0 +1,49 @@
+version: 2
+updates:
+  # TypeScript dependencies
+  - package-ecosystem: "npm"
+    directory: "/examples/typescript/wallet-connect"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Solidity dependencies
+  - package-ecosystem: "npm"
+    directory: "/examples/solidity/erc20-token"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/examples/solidity/erc721-nft"
+    schedule:
+      interval: "weekly"
+
+  # Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/examples/python/web3-scripts"
+    schedule:
+      interval: "weekly"
+
+  # Go dependencies
+  - package-ecosystem: "gomod"
+    directory: "/examples/go/signature-verifier"
+    schedule:
+      interval: "weekly"
+
+  # Rust dependencies
+  - package-ecosystem: "cargo"
+    directory: "/examples/rust/solana-counter"
+    schedule:
+      interval: "weekly"
+
+  # Java dependencies
+  - package-ecosystem: "maven"
+    directory: "/examples/java/web3j-demo"
+    schedule:
+      interval: "weekly"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
