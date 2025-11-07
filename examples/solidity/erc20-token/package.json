@@ -12,7 +12,7 @@
   "keywords": ["ethereum", "smart-contracts", "erc20", "hardhat", "web3"],
   "license": "MIT",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
     "hardhat": "^2.19.0",
     "dotenv": "^16.3.1"
   },
