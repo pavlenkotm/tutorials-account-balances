@@ -1,13 +1,13 @@
 module github.com/example/signature-verifier
 
-go 1.21
+go 1.24.0
 
-require github.com/ethereum/go-ethereum v1.13.5
+require github.com/ethereum/go-ethereum v1.16.7
 
 require (
-	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
+	github.com/ProjectZKM/Ziren/crates/go-runtime/zkvm_runtime v0.0.0-20251001021608-1fe7b43fc4d6 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
-	github.com/holiman/uint256 v1.2.4 // indirect
-	golang.org/x/crypto v0.17.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	github.com/holiman/uint256 v1.3.2 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
 )
