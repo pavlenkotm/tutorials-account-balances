@@ -1,4 +1,5 @@
 // Simple in-memory cache implementation
+import { logger } from '@subql/node';
 
 /**
  * Cache entry with expiration
@@ -191,11 +192,52 @@ export class LRUCache<T> {
 }
 
 /**
- * Global cache instances
+ * Cache value types
  */
-export const accountCache = new SimpleCache<any>(600); // 10 minutes
-export const transferCache = new LRUCache<any>(1000);
-export const statisticsCache = new SimpleCache<any>(300); // 5 minutes
+export interface CachedAccount {
+    id: string;
+    balance: bigint;
+    lastUpdated: bigint;
+}
+
+export interface CachedTransfer {
+    id: string;
+    from: string;
+    to: string;
+    amount: bigint;
+    blockNumber: bigint;
+}
+
+export interface CachedStatistics {
+    totalAccounts: number;
+    totalTransfers: number;
+    totalVolume: bigint;
+    lastUpdated: bigint;
+}
+
+/**
+ * Global cache instances with proper typing
+ */
+export const accountCache = new SimpleCache<CachedAccount>(600); // 10 minutes
+export const transferCache = new LRUCache<CachedTransfer>(1000);
+export const statisticsCache = new SimpleCache<CachedStatistics>(300); // 5 minutes
+
+/**
+ * Auto-cleanup interval for SimpleCache instances
+ */
+const CLEANUP_INTERVAL = 60000; // 1 minute
+
+// Start periodic cleanup for TTL-based caches
+if (typeof setInterval !== 'undefined') {
+    setInterval(() => {
+        const accountRemoved = accountCache.cleanup();
+        const statsRemoved = statisticsCache.cleanup();
+
+        if (accountRemoved > 0 || statsRemoved > 0) {
+            logger.info(`Cache cleanup: removed ${accountRemoved} accounts, ${statsRemoved} stats`);
+        }
+    }, CLEANUP_INTERVAL);
+}
 
 /**
  * Cache key builders

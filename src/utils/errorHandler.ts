@@ -1,4 +1,12 @@
 // Error handling utilities
+import { logger } from '@subql/node';
+
+/**
+ * Error context interface
+ */
+export interface ErrorContext {
+    [key: string]: unknown;
+}
 
 /**
  * Custom error types
@@ -11,24 +19,40 @@ export enum ErrorType {
 }
 
 /**
- * Custom error class
+ * Custom error class with proper typing
  */
 export class SubQueryError extends Error {
     type: ErrorType;
-    context?: any;
+    context?: ErrorContext;
+    timestamp: number;
 
-    constructor(message: string, type: ErrorType, context?: any) {
+    constructor(message: string, type: ErrorType, context?: ErrorContext) {
         super(message);
         this.name = 'SubQueryError';
         this.type = type;
         this.context = context;
+        this.timestamp = Date.now();
+
+        // Maintain proper stack trace
+        Error.captureStackTrace(this, this.constructor);
+    }
+
+    toJSON(): Record<string, unknown> {
+        return {
+            name: this.name,
+            message: this.message,
+            type: this.type,
+            context: this.context,
+            timestamp: this.timestamp,
+            stack: this.stack,
+        };
     }
 }
 
 /**
  * Handle validation errors
  */
-export function handleValidationError(field: string, value: any): SubQueryError {
+export function handleValidationError(field: string, value: unknown): SubQueryError {
     return new SubQueryError(
         `Validation failed for field: ${field}`,
         ErrorType.VALIDATION_ERROR,
@@ -106,16 +130,18 @@ export async function retryOperation<T>(
 /**
  * Log error with context
  */
-export function logError(error: Error | SubQueryError, context?: any): void {
-    const errorInfo = {
+export function logError(error: Error | SubQueryError, context?: ErrorContext): void {
+    const errorInfo: Record<string, unknown> = {
         message: error.message,
         name: error.name,
         stack: error.stack,
+        timestamp: Date.now(),
         ...(error instanceof SubQueryError && {
             type: error.type,
             errorContext: error.context,
+            errorTimestamp: error.timestamp,
         }),
-        ...context,
+        ...(context && { additionalContext: context }),
     };
 
     logger.error(JSON.stringify(errorInfo, null, 2));
