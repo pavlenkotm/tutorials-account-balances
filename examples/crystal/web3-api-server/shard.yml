@@ -1,0 +1,28 @@
+name: web3-api-server
+version: 0.1.0
+
+authors:
+  - Web3 Multi-Language Playground
+
+description: |
+  High-performance Web3 API server built with Crystal.
+  Provides RESTful endpoints for Ethereum blockchain data
+  with built-in caching and rate limiting.
+
+crystal: ">= 1.10.0"
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+    version: ~> 1.4.0
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: ~> 1.5.0
+
+license: MIT
+
+targets:
+  web3-api-server:
+    main: src/server.cr
